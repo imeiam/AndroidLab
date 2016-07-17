@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 /**
  * Created by AkilAdeshwar on 17-07-2016.
@@ -17,17 +18,22 @@ public class Ex1 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-
         View rootView = inflater.inflate(R.layout.ex_1_content,container,false);
+
+        TextView textView = (TextView) rootView.findViewById(R.id.hello_world);
+        textView.setTypeface(StartActivity.thinTypeface);
 
         //Toolbar setup
         Ex1Comm activityComm = (Ex1Comm) getActivity();
         activityComm.setToolbarTitle("Hello Android");
-
+        activityComm.setFabVisibility(true);
         return rootView;
     }
 
     public interface Ex1Comm{
+
         void setToolbarTitle(String title);
+        void setFabVisibility(boolean visibility);
     }
+
 }

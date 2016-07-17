@@ -2,14 +2,16 @@ package gop.akiladeshwar.exercise1;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 public class StartActivity extends AppCompatActivity
@@ -20,10 +22,12 @@ public class StartActivity extends AppCompatActivity
 
 
     public static Typeface title;
+    public static Typeface thinTypeface;
 
     TextView toolbarTitle;
     Toolbar toolbar;
 
+    FloatingActionButton fab;
 
     public static String EX_0_FRAGMENT = "ex_0";
     public static String EX_1_FRAGMENT = "ex_1";
@@ -31,6 +35,12 @@ public class StartActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(savedInstanceState==null){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container,new Ex0(),EX_0_FRAGMENT)
+                    .commit();
+        }
         setContentView(R.layout.activity_start);
 
         //Setup ToolBar
@@ -41,6 +51,8 @@ public class StartActivity extends AppCompatActivity
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         title = Typeface.createFromAsset(getAssets(),"dead.ttf");
+
+        thinTypeface = Typeface.createFromAsset(getAssets(),"thin.ttf");
 
         toolbarTitle = (TextView) findViewById(R.id.title_text);
         toolbarTitle.setTypeface(title);
@@ -55,6 +67,20 @@ public class StartActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        TextView sideNavTitle  = (TextView) navigationView.getHeaderView(0).findViewById(R.id.side_nav_title);
+        sideNavTitle.setTypeface(title);
+
+
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "I respond to Click events", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+        setFabVisibility(false);
     }
 
     @Override
@@ -68,34 +94,6 @@ public class StartActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.start, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            if(toolbarTitle!=null){
-                toolbarTitle.setText("Welcome to Android");
-            }
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container,new Ex0(),EX_0_FRAGMENT)
-                    .commit();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
     }
@@ -106,6 +104,15 @@ public class StartActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        if (id == R.id.ex_0) {
+            if(toolbarTitle!=null){
+                toolbarTitle.setText("Welcome to Android");
+            }
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container,new Ex0(),EX_0_FRAGMENT)
+                    .commit();
+            setFabVisibility(false);
+        }
         if (id == R.id.ex_1) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container,new Ex1(),EX_1_FRAGMENT)
@@ -118,11 +125,20 @@ public class StartActivity extends AppCompatActivity
         return true;
     }
 
-
     @Override
     public void setToolbarTitle(String title){
         if(toolbarTitle!=null && title!=null){
             toolbarTitle.setText(title);
+        }
+    }
+
+    @Override
+    public void setFabVisibility(boolean visible) {
+        if(fab!=null){
+            if(visible)
+                fab.setVisibility(View.VISIBLE);
+            else
+                fab.setVisibility(View.INVISIBLE);
         }
     }
 }
