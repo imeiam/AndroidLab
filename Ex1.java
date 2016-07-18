@@ -24,16 +24,11 @@ public class Ex1 extends Fragment {
         textView.setTypeface(StartActivity.thinTypeface);
 
         //Toolbar setup
-        Ex1Comm activityComm = (Ex1Comm) getActivity();
+        ActivityComm activityComm = (ActivityComm) getActivity();
         activityComm.setToolbarTitle("Hello Android");
-        activityComm.setFabVisibility(true);
+        activityComm.setFabConfig(true,FabListener.HELLO_ANDROID,android.R.drawable.ic_menu_mylocation,null,null,this);
         return rootView;
     }
 
-    public interface Ex1Comm{
-
-        void setToolbarTitle(String title);
-        void setFabVisibility(boolean visibility);
-    }
 
 }
